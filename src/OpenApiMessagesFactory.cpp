@@ -317,3 +317,18 @@ ProtoOAExecutionEvent OpenApiMessagesFactory::GetExecutionEvent(string msg)
     _msg.ParseFromString(msg);
     return _msg;
 }
+
+ProtoMessage OpenApiMessagesFactory::CreateProtoOASymbolsListReq(long ctid) {
+    ProtoOASymbolsListReq _msg;
+    string msg_str;
+    _msg.set_ctidtraderaccountid(ctid);
+    _msg.SerializeToString(&msg_str);
+
+    return CreateMessage(_msg.payloadtype(), msg_str);
+}
+
+ProtoOASymbolsListRes OpenApiMessagesFactory::GetSymbolListRes(string msg) {
+    ProtoOASymbolsListRes res;
+    res.ParseFromString(msg);
+    return res;
+}

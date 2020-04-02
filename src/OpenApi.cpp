@@ -6,6 +6,17 @@ OpenApi::OpenApi() :
     _net.messageHandler = this;
 }
 
+void OpenApi::connect(std::string server, int port, std::string clientId, std::string clientSecret, std::string token,
+                      long accountId)
+{
+    _clientId = clientId;
+    _clientSecret = clientSecret;
+    _token = token;
+    _accountID = accountId;
+
+    _net.startConnection(server, port);
+}
+
 void OpenApi::authorizeApplication()
 {
     ProtoMessage msg = messageFactory.CreateAppAuthorizationRequest(_clientId,
@@ -108,6 +119,11 @@ void OpenApi::SendLimitOrder(ProtoOATradeSide side, int volume, double price)
 void OpenApi::heartBeatACK()
 {
     ProtoMessage msg = messageFactory.CreateHeartbeatEvent();
+    _net.transmit(msg);
+}
+
+void OpenApi::GetSymbols() {
+    ProtoMessage msg = messageFactory.CreateProtoOASymbolsListReq(_accountID);
     _net.transmit(msg);
 }
 
@@ -259,18 +275,18 @@ void OpenApi::handleMessage(ProtoMessage message)
         }
             break;
 
+        case PROTO_OA_SYMBOLS_LIST_RES:
+        {
+            cout << "Symbol List\n";
+            ProtoOASymbolsListRes res;
+            res.ParseFromString(message.payload());
+            if(onSymbolListReceived)
+                onSymbolListReceived(res);
+        }
+            break;
+
         default:
             break;
     }
 }
 
-void OpenApi::connect(std::string server, int port, std::string clientId, std::string clientSecret, std::string token,
-                      long accountId)
-{
-    _clientId = clientId;
-    _clientSecret = clientSecret;
-    _token = token;
-    _accountID = accountId;
-
-    _net.startConnection(server, port);
-}

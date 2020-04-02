@@ -9,13 +9,21 @@ int main(int argc, char* argv[])
 {
     OpenApi api;
     api.connect(
-                "live.ctraderapi.com",
+                "demo.ctraderapi.com",
                 5035,
                 CLIID,
                 CLSECRET,
                 ACCTOKEN,
                 ACCID
             );
+
+    api.onSymbolListReceived = [](ProtoOASymbolsListRes res) {
+        for(int i = 0; i < res.symbol_size(); i++)
+        {
+            auto symbol = res.symbol(i);
+            cout << symbol.symbolname() << ", " << symbol.symbolid() << endl;
+        }
+    };
 
     char opt;
 
@@ -50,6 +58,9 @@ int main(int argc, char* argv[])
                 api.ClosePosition(123121, 100000);
                 break;
             case '8':
+                api.GetSymbols();
+                break;
+            case '0':
                 running = false;
                 break;
             default:

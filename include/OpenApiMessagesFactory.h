@@ -72,6 +72,10 @@ public:
         long to, ProtoOAQuoteType type);
 
     ProtoOAExecutionEvent GetExecutionEvent(string msg);
+
+    ProtoMessage CreateProtoOASymbolsListReq(long ctid);
+
+    ProtoOASymbolsListRes GetSymbolListRes(string msg);
 };
 
 #endif // CTRADEROPENAPI_OPENAPIMESSAGEFACTORY_H

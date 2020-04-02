@@ -24,6 +24,7 @@ public:
     void ClosePosition(long positionId, long volume);
     void SendLimitOrder(ProtoOATradeSide side, int volume, double price);
     void heartBeatACK();
+    void GetSymbols();
 
     std::function<void(void)> onAppAuthorized;
     std::function<void(void)> onAccAuthorized;
@@ -37,6 +38,7 @@ public:
     std::function<void(ProtoOATraderRes)> onTraderReceived;
     std::function<void(ProtoOAOrderErrorEvent)> onOrderErrorReceived;
     std::function<void(ProtoOAErrorRes)> onErrorReceived;
+    std::function<void(ProtoOASymbolsListRes)> onSymbolListReceived;
 
 private:
     std::string _clientId;
