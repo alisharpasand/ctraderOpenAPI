@@ -115,7 +115,7 @@ int openSSLSocket()
     int err = 0;
     struct hostent *host_entry;
     struct sockaddr_in sa;
-    const SSL_METHOD *meth = TLS_client_method();
+    const SSL_METHOD *meth = TLSv1_2_client_method();
 
     OpenSSL_add_ssl_algorithms();
     SSL_load_error_strings();
