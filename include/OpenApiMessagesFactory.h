@@ -1,3 +1,5 @@
+#ifndef CTRADEROPENAPI_OPENAPIMESSAGEFACTORY_H
+#define CTRADEROPENAPI_OPENAPIMESSAGEFACTORY_H
 
 #include <string>
 #include "OpenApiMessages.pb.h"
@@ -71,3 +73,5 @@ public:
 
     ProtoOAExecutionEvent GetExecutionEvent(string msg);
 };
+
+#endif // CTRADEROPENAPI_OPENAPIMESSAGEFACTORY_H
