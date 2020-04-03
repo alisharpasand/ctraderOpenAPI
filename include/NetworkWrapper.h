@@ -29,7 +29,6 @@ private:
     char _buf[4096];
     std::string _apiHost = "demo.ctraderapi.com";
     int _apiPort = 5035;
-    int MaxMessageSize = 1000000;
     bool _listening = false;
     pthread_t _readThread;
 

@@ -183,14 +183,6 @@ void OpenApi::handleMessage(ProtoMessage message)
             cout << "Event\n";
             ProtoOAExecutionEvent _payload_msg =
                     messageFactory.GetExecutionEvent(message.payload());
-            if (_payload_msg.has_order())
-            {
-                unsigned long testOrderId = _payload_msg.order().orderid();
-            }
-            if (_payload_msg.has_position())
-            {
-                unsigned long testPositionId = _payload_msg.position().positionid();
-            }
             if(onOrderExecuted)
                 onOrderExecuted(_payload_msg);
         }
