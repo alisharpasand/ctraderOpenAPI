@@ -49,16 +49,29 @@ link_directories(
 
 add_compile_options(-Wall -Wno-write-strings -O3)
 
-add_executable(ctraderOpenAPI
+add_library(ctrader-openapi SHARED
         protobuf-compiled/OpenApiCommonMessages.pb.h
         protobuf-compiled/OpenApiCommonModelMessages.pb.h
         protobuf-compiled/OpenApiMessages.pb.h
         protobuf-compiled/OpenApiMessagesFactory.h
         protobuf-compiled/OpenApiModelMessages.pb.h
-        src/credentials.h
-        src/main.cpp
         src/OpenApiMessagesFactory.cpp
         protobuf-compiled/OpenApiCommonMessages.pb.cc
         protobuf-compiled/OpenApiCommonModelMessages.pb.cc
         protobuf-compiled/OpenApiMessages.pb.cc
-        protobuf-compiled/OpenApiModelMessages.pb.cc src/OpenApi.cpp include/OpenApi.h src/NetworkWrapper.cpp include/NetworkWrapper.h include/MessageHandler.h)
+        protobuf-compiled/OpenApiModelMessages.pb.cc
+        src/OpenApi.cpp
+        include/OpenApi.h
+        src/NetworkWrapper.cpp
+        include/NetworkWrapper.h
+        include/MessageHandler.h
+        )
+
+add_executable(ctraderOpenApiExample
+        src/credentials.h
+        src/main.cpp
+        )
+
+target_link_libraries(ctraderOpenApiExample
+        ctrader-openapi
+        )

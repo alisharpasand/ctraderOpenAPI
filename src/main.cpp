@@ -41,7 +41,8 @@ int main(int argc, char* argv[])
         cout << "1- Authorize App\n2- Authorize Account\n"
         "3- Get Accounts List\n"
         "4- Subscribe For Spots\n5- Unsubscribe From Spots\n"
-        "6- Market Order\n7- Close Position\n";
+        "6- Market Order\n7- Close Position\n"
+        "8- Get Symbols\n\n0- Quit";
         cin >> opt;
         switch(opt)
         {
