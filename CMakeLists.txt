@@ -50,28 +50,25 @@ link_directories(
 add_compile_options(-Wall -Wno-write-strings -O3)
 
 add_library(ctrader-openapi SHARED
-        protobuf-compiled/OpenApiCommonMessages.pb.h
-        protobuf-compiled/OpenApiCommonModelMessages.pb.h
-        protobuf-compiled/OpenApiMessages.pb.h
-        protobuf-compiled/OpenApiMessagesFactory.h
-        protobuf-compiled/OpenApiModelMessages.pb.h
         src/OpenApiMessagesFactory.cpp
         protobuf-compiled/OpenApiCommonMessages.pb.cc
         protobuf-compiled/OpenApiCommonModelMessages.pb.cc
         protobuf-compiled/OpenApiMessages.pb.cc
         protobuf-compiled/OpenApiModelMessages.pb.cc
         src/OpenApi.cpp
-        include/OpenApi.h
         src/NetworkWrapper.cpp
-        include/NetworkWrapper.h
-        include/MessageHandler.h
+        )
+
+set_target_properties(ctrader-openapi PROPERTIES
+        PUBLIC_HEADER "${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiCommonMessages.pb.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiMessages.pb.h;include/OpenApiMessagesFactory.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiModelMessages.pb.h;include/OpenApi.h;include/NetworkWrapper.h;include/MessageHandler.h"
         )
 
 add_executable(ctraderOpenApiExample
-        src/credentials.h
         src/main.cpp
         )
 
 target_link_libraries(ctraderOpenApiExample
         ctrader-openapi
         )
+
+install(TARGETS ctrader-openapi)
