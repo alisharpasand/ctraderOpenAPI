@@ -60,7 +60,7 @@ add_library(ctrader-openapi SHARED
         )
 
 set_target_properties(ctrader-openapi PROPERTIES
-        PUBLIC_HEADER "${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiCommonMessages.pb.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiMessages.pb.h;include/OpenApiMessagesFactory.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiModelMessages.pb.h;include/OpenApi.h;include/NetworkWrapper.h;include/MessageHandler.h"
+        PUBLIC_HEADER "${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiCommonMessages.pb.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiCommonModelMessages.pb.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiMessages.pb.h;${CMAKE_CURRENT_BINARY_DIR}/protobuf-compiled/OpenApiModelMessages.pb.h;include/OpenApiMessagesFactory.h;include/OpenApi.h;include/NetworkWrapper.h;include/MessageHandler.h"
         )
 
 add_executable(ctraderOpenApiExample
