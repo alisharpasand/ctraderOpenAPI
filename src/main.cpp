@@ -25,6 +25,15 @@ int main(int argc, char* argv[])
         }
     };
 
+    api.onAccountListReceived = [](ProtoOAGetAccountListByAccessTokenRes res) {
+        cout << "Permission Scope: " << res.permissionscope() << endl;
+        for(int i = 0; i < res.ctidtraderaccount_size(); i++)
+        {
+            auto account = res.ctidtraderaccount(i);
+            cout << account.ctidtraderaccountid() << ", " << account.islive() << endl;
+        }
+    };
+
     char opt;
 
     bool running = true;
@@ -52,7 +61,7 @@ int main(int argc, char* argv[])
                 api.unSubscribeFromSpots();
                 break;
             case '6':
-                api.SendMarketOrder(1, BUY, 10);
+                api.SendMarketOrder(1, BUY, 100000);
                 break;
             case '7':
                 api.ClosePosition(123121, 100000);
