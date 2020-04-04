@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "OpenApiMessages.pb.h"
 #include "OpenApiModelMessages.pb.h"
 #include "OpenApiCommonMessages.pb.h"
@@ -121,17 +122,30 @@ ProtoMessage OpenApiMessagesFactory::CreateHeartbeatEvent(void)
     return CreateMessage(HEARTBEAT_EVENT, msg_str);
 }
 
-ProtoMessage OpenApiMessagesFactory::CreateMarketOrderRequest(long accountId,
-    string accessToken, int symbolId, ProtoOATradeSide tradeSide, long volume)
+ProtoMessage OpenApiMessagesFactory::CreateLimitOrderRequest(long accountId,
+                                                             string accessToken,
+                                                             int symbolId,
+                                                             ProtoOATradeSide tradeSide,
+                                                             long volume,
+                                                             double limitPrice,
+                                                             double stopLoss,
+                                                             double takeProfit,
+                                                             long expirationTimestamp)
 {
     ProtoOANewOrderReq _msg;
     string msg_str;
     _msg.set_ctidtraderaccountid(accountId);
     _msg.set_symbolid(symbolId);
-    _msg.set_ordertype(MARKET);
+    _msg.set_ordertype(LIMIT);
     _msg.set_tradeside(tradeSide);
     _msg.set_volume(volume);
-    _msg.set_comment("MarketOrder");
+    _msg.set_comment("LimitOrder");
+    _msg.set_limitprice(limitPrice);
+    _msg.set_stoploss(stopLoss);
+    _msg.set_takeprofit(takeProfit);
+    _msg.set_timeinforce(GOOD_TILL_DATE);
+    _msg.set_expirationtimestamp(expirationTimestamp);
+
     _msg.SerializeToString(&msg_str);
 
     return CreateMessage(_msg.payloadtype(), msg_str);

@@ -18,7 +18,13 @@ public:
     void getAccountsList();
     void subscribeForSpots();
     void unSubscribeFromSpots();
-    void SendMarketOrder(int symbol, ProtoOATradeSide side, long volume);
+    void SendLimitOrder(int symbol,
+                        ProtoOATradeSide side,
+                        long volume,
+                        double limitPrice,
+                        double stopLoss,
+                        double takeProfit,
+                        long expirationTimestamp);
     void GetOrders();
     void GetTickData(int days, int symbol);
     void SendStopOrder(int symbol, ProtoOATradeSide side, int volume, double stopPrice);

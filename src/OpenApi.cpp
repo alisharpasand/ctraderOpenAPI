@@ -76,10 +76,23 @@ void OpenApi::unSubscribeFromSpots()
     _net.transmit(msg);
 }
 
-void OpenApi::SendMarketOrder(int symbol, ProtoOATradeSide side, long volume)
+void OpenApi::SendLimitOrder(int symbol,
+                             ProtoOATradeSide side,
+                             long volume,
+                             double limitPrice,
+                             double stopLoss,
+                             double takeProfit,
+                             long expirationTimestamp)
 {
-    ProtoMessage msg = messageFactory.CreateMarketOrderRequest(_accountID,
-                                                               _token, symbol, side, volume);
+    ProtoMessage msg = messageFactory.CreateLimitOrderRequest(_accountID,
+                                                              _token,
+                                                              symbol,
+                                                              side,
+                                                              volume,
+                                                              limitPrice,
+                                                              stopLoss,
+                                                              takeProfit,
+                                                              expirationTimestamp);
     _net.transmit(msg);
 }
 

@@ -33,8 +33,15 @@ public:
     ProtoMessage CreateHeartbeatEvent(void);
     ProtoMessage CreateReconcileRequest(long accountId);
 
-    ProtoMessage CreateMarketOrderRequest(long accountId, string accessToken,
-        int symbolId, ProtoOATradeSide tradeSide, long volume);
+    ProtoMessage CreateLimitOrderRequest(long accountId,
+                                         string accessToken,
+                                         int symbolId,
+                                         ProtoOATradeSide tradeSide,
+                                         long volume,
+                                         double limitPrice,
+                                         double stopLoss,
+                                         double takeProfit,
+                                         long expirationTimestamp);
 
     ProtoMessage CreateStopOrderRequest(long accountId, string accessToken,
         int symbolId, ProtoOATradeSide tradeSide, long volume,
