@@ -117,7 +117,7 @@ void NetworkWrapper::transmit(const ProtoMessage& message)
 {
     std::string msgStr;
     unsigned char sizeArray[4];
-    size_t size = message.ByteSizeLong();
+    size_t size = message.ByteSize();
     auto *pkt = new unsigned char [size];
 
     message.SerializeToArray(pkt, size);
@@ -126,7 +126,7 @@ void NetworkWrapper::transmit(const ProtoMessage& message)
     memcpy(sizeArray, &size, 4);
     //
     writeSSLSocket(_ssl, (char*)sizeArray, 4);
-    writeSSLSocket(_ssl, (char*)pkt, message.ByteSizeLong());
+    writeSSLSocket(_ssl, (char*)pkt, message.ByteSize());
 }
 
 void *NetworkWrapper::read_task(void *arg)

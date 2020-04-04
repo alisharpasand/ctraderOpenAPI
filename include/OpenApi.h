@@ -2,6 +2,7 @@
 #define CTRADEROPENAPI_OPENAPI_H
 
 #include <list>
+#include <functional>
 #include "OpenApiMessagesFactory.h"
 #include "NetworkWrapper.h"
 #include "MessageHandler.h"

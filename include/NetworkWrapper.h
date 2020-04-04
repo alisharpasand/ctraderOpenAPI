@@ -5,6 +5,7 @@
 #include <openssl/ossl_typ.h>
 #include <cstdint>
 #include <OpenApiCommonMessages.pb.h>
+#include <iostream>
 #include "MessageHandler.h"
 
 class NetworkWrapper {

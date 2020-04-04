@@ -1,5 +1,7 @@
 #include "OpenApi.h"
 
+#include <iostream>
+
 OpenApi::OpenApi() :
     _net(NetworkWrapper::getInstance())
 {
