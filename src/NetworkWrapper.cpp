@@ -68,6 +68,11 @@ int NetworkWrapper::readSSLSocket(SSL *sslx)
     return err;
 }
 
+void NetworkWrapper::join()
+{
+    pthread_join(_readThread, NULL);
+}
+
 int NetworkWrapper::openSSLSocket()
 {
     int err = 0;
@@ -170,6 +175,6 @@ void NetworkWrapper::startConnection(std::string server, int port) {
     _listening = true;
     pthread_attr_t attr;
     pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+//    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     pthread_create(&_readThread, &attr, read_task, nullptr);
 }

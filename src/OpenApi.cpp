@@ -19,6 +19,11 @@ void OpenApi::connect(std::string server, int port, std::string clientId, std::s
     _net.startConnection(server, port);
 }
 
+void OpenApi::join()
+{
+    _net.join();
+}
+
 void OpenApi::authorizeApplication()
 {
     ProtoMessage msg = messageFactory.CreateAppAuthorizationRequest(_clientId,

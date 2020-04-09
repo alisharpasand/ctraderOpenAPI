@@ -12,6 +12,7 @@ public:
     OpenApi();
 
     void connect(std::string server, int port, std::string clientId, std::string clientSecret, std::string token, long accountId);
+    void join();
 
     void authorizeApplication();
     void authorizeAccount();

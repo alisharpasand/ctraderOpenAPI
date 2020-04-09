@@ -18,6 +18,7 @@ public:
     void printfCertInfo(SSL *sslx);
     int writeSSLSocket(SSL *sslx, char *msg, uint16_t size);
     int readSSLSocket(SSL *sslx);
+    void join();
     int openSSLSocket();
     void transmit(const ProtoMessage& message);
     MessageHandler *messageHandler = nullptr;
