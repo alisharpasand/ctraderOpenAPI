@@ -17,8 +17,8 @@ public:
     void authorizeApplication();
     void authorizeAccount();
     void getAccountsList();
-    void subscribeForSpots();
-    void unSubscribeFromSpots();
+    void subscribeForSpots(int symbolId);
+    void unSubscribeFromSpots(int symbolId);
     void SendLimitOrder(int symbol,
                         ProtoOATradeSide side,
                         long volume,

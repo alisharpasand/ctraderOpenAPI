@@ -56,10 +56,10 @@ int main(int argc, char* argv[])
                 api.getAccountsList();
                 break;
             case '4':
-                api.subscribeForSpots();
+                api.subscribeForSpots(1);
                 break;
             case '5':
-                api.unSubscribeFromSpots();
+                api.unSubscribeFromSpots(1);
                 break;
             case '6':
                 api.SendLimitOrder(1, BUY, 100000,1.2001, 1.200, 1.205, 1000);
