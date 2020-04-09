@@ -64,13 +64,13 @@ void OpenApi::getAccountsList()
 //    }*/
 }
 
-void OpenApi::subscribeForSpots()
+void OpenApi::subscribeForSpots(int symbolId)
 {
-    ProtoMessage msg = messageFactory.CreateSubscribeForSpotsRequest(_accountID, 1);
+    ProtoMessage msg = messageFactory.CreateSubscribeForSpotsRequest(_accountID, symbolId);
     _net.transmit(msg);
 }
 
-void OpenApi::unSubscribeFromSpots()
+void OpenApi::unSubscribeFromSpots(int symbolId)
 {
     ProtoMessage msg = messageFactory.CreateUnsubscribeFromSpotsRequest(_accountID, 1);
     _net.transmit(msg);
