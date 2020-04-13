@@ -130,7 +130,8 @@ ProtoMessage OpenApiMessagesFactory::CreateLimitOrderRequest(long accountId,
                                                              double limitPrice,
                                                              double stopLoss,
                                                              double takeProfit,
-                                                             long expirationTimestamp)
+                                                             long expirationTimestamp,
+                                                             string clientMsgId)
 {
     ProtoOANewOrderReq _msg;
     string msg_str;
@@ -148,7 +149,7 @@ ProtoMessage OpenApiMessagesFactory::CreateLimitOrderRequest(long accountId,
 
     _msg.SerializeToString(&msg_str);
 
-    return CreateMessage(_msg.payloadtype(), msg_str);
+    return CreateMessage(_msg.payloadtype(), msg_str, clientMsgId);
 }
 
 ProtoMessage OpenApiMessagesFactory::CreateStopOrderRequest(long accountId,
@@ -169,25 +170,25 @@ ProtoMessage OpenApiMessagesFactory::CreateStopOrderRequest(long accountId,
     return CreateMessage(_msg.payloadtype(), msg_str);
 }
 
-ProtoMessage OpenApiMessagesFactory::CreateLimitOrderRequest(long accountId,
-    string accessToken, int symbolId, ProtoOATradeSide tradeSide, long volume,
-    double limitPrice)
-{
-    ProtoOANewOrderReq _msg;
-    string msg_str;
-    long epoch = (time(NULL) + 60) * 1000;
-    _msg.set_ctidtraderaccountid(accountId);
-    _msg.set_symbolid(symbolId);
-    _msg.set_ordertype(LIMIT);
-    _msg.set_tradeside(tradeSide);
-    _msg.set_volume(volume);
-    _msg.set_limitprice(limitPrice);
-    _msg.set_comment("LimitOrder");
-    _msg.set_expirationtimestamp(epoch);
-    _msg.SerializeToString(&msg_str);
-
-    return CreateMessage(_msg.payloadtype(), msg_str);
-}
+//ProtoMessage OpenApiMessagesFactory::CreateLimitOrderRequest(long accountId,
+//    string accessToken, int symbolId, ProtoOATradeSide tradeSide, long volume,
+//    double limitPrice)
+//{
+//    ProtoOANewOrderReq _msg;
+//    string msg_str;
+//    long epoch = (time(NULL) + 60) * 1000;
+//    _msg.set_ctidtraderaccountid(accountId);
+//    _msg.set_symbolid(symbolId);
+//    _msg.set_ordertype(LIMIT);
+//    _msg.set_tradeside(tradeSide);
+//    _msg.set_volume(volume);
+//    _msg.set_limitprice(limitPrice);
+//    _msg.set_comment("LimitOrder");
+//    _msg.set_expirationtimestamp(epoch);
+//    _msg.SerializeToString(&msg_str);
+//
+//    return CreateMessage(_msg.payloadtype(), msg_str);
+//}
 
 ProtoMessage OpenApiMessagesFactory::CreateStopLimitOrderRequest(long accountId,
     string accessToken, int symbolId, ProtoOATradeSide tradeSide, long volume,

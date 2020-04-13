@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
                 api.unSubscribeFromSpots(1);
                 break;
             case '6':
-                api.SendLimitOrder(1, BUY, 100000,1.2001, 1.200, 1.205, 1000);
+                api.SendLimitOrder(1, BUY, 100000,1.2001, 1.200, 1.205, 1000, "");
                 break;
             case '7':
                 api.ClosePosition(123121, 100000);

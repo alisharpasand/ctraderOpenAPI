@@ -1,6 +1,7 @@
 #include "OpenApi.h"
 
 #include <iostream>
+using namespace std;
 
 OpenApi::OpenApi() :
     _net(NetworkWrapper::getInstance())
@@ -87,7 +88,8 @@ void OpenApi::SendLimitOrder(int symbol,
                              double limitPrice,
                              double stopLoss,
                              double takeProfit,
-                             long expirationTimestamp)
+                             long expirationTimestamp,
+                             std::string clientMsgId)
 {
     ProtoMessage msg = messageFactory.CreateLimitOrderRequest(_accountID,
                                                               _token,
@@ -97,7 +99,8 @@ void OpenApi::SendLimitOrder(int symbol,
                                                               limitPrice,
                                                               stopLoss,
                                                               takeProfit,
-                                                              expirationTimestamp);
+                                                              expirationTimestamp,
+                                                              clientMsgId);
     _net.transmit(msg);
 }
 
@@ -126,13 +129,6 @@ void OpenApi::ClosePosition(long positionId, long volume)
 {
     ProtoMessage msg = messageFactory.CreateClosePositionRequest(_accountID,
                                                                  positionId, volume);
-    _net.transmit(msg);
-}
-
-void OpenApi::SendLimitOrder(ProtoOATradeSide side, int volume, double price)
-{
-    ProtoMessage msg = messageFactory.CreateLimitOrderRequest(_accountID,
-                                                              _token, 1, side, volume, price);
     _net.transmit(msg);
 }
 
@@ -204,7 +200,7 @@ void OpenApi::handleMessage(ProtoMessage message)
             ProtoOAExecutionEvent _payload_msg =
                     messageFactory.GetExecutionEvent(message.payload());
             if(onOrderExecuted)
-                onOrderExecuted(_payload_msg);
+                onOrderExecuted(_payload_msg, message.has_clientmsgid() ? message.clientmsgid() : "");
         }
             break;
 
@@ -300,5 +296,10 @@ void OpenApi::handleMessage(ProtoMessage message)
         default:
             break;
     }
+}
+
+void OpenApi::SendAmendPositionSLTPReq(long positionId, double stopLossPrice, double takeProfitPrice)
+{
+    ProtoMessage msg = messageFactory.CreateAmendPositionSLTPRequest(_accountID, positionId, stopLossPrice, takeProfitPrice);
 }
 

@@ -25,12 +25,13 @@ public:
                         double limitPrice,
                         double stopLoss,
                         double takeProfit,
-                        long expirationTimestamp);
+                        long expirationTimestamp,
+                        std::string clientMsgId);
+    void SendAmendPositionSLTPReq(long positionId, double stopLossPrice, double takeProfitPrice);
     void GetOrders();
     void GetTickData(int days, int symbol);
     void SendStopOrder(int symbol, ProtoOATradeSide side, int volume, double stopPrice);
     void ClosePosition(long positionId, long volume);
-    void SendLimitOrder(ProtoOATradeSide side, int volume, double price);
     void heartBeatACK();
     void GetSymbols();
 
@@ -40,7 +41,7 @@ public:
     std::function<void(void)> onSpotsSubscribed;
     std::function<void(void)> onSpotsUnsubscribed;
     std::function<void(ProtoOASpotEvent)> onSpotReceived;
-    std::function<void(ProtoOAExecutionEvent)> onOrderExecuted;
+    std::function<void(ProtoOAExecutionEvent, std::string clientMsgId)> onOrderExecuted;
     std::function<void(ProtoOAReconcileRes)> onOrdersReceived;
     std::function<void(ProtoOAGetTickDataRes)> onTickDataReceived;
     std::function<void(ProtoOATraderRes)> onTraderReceived;

@@ -7,26 +7,24 @@
 #include "OpenApiCommonMessages.pb.h"
 #include "OpenApiCommonModelMessages.pb.h"
 
-using namespace std;
-
 class OpenApiMessagesFactory
 {
     uint lastMessagePayloadType;
-    string lastMessagePayload;
+    std::string lastMessagePayload;
 
 public:
 
-    string getLastMessage(void);
-    ProtoMessage GetMessage(string msg);
-    ProtoMessage CreateMessage(uint payloadType, string &payload,
-                string &clientMsgId);
-    ProtoMessage CreateMessage(uint payloadType, string &payload);
+    std::string getLastMessage(void);
+    ProtoMessage GetMessage(std::string msg);
+    ProtoMessage CreateMessage(uint payloadType, std::string &payload,
+                std::string &clientMsgId);
+    ProtoMessage CreateMessage(uint payloadType, std::string &payload);
 
-    ProtoMessage CreateAppAuthorizationRequest(string clientId,
-        string clientSecret);
-    ProtoMessage CreateAccAuthorizationRequest(string token,
+    ProtoMessage CreateAppAuthorizationRequest(std::string clientId,
+        std::string clientSecret);
+    ProtoMessage CreateAccAuthorizationRequest(std::string token,
         long accountId);
-    ProtoMessage CreateAccountListRequest(string token);
+    ProtoMessage CreateAccountListRequest(std::string token);
     ProtoMessage CreateSubscribeForSpotsRequest(long accountId, int symbolId);
     ProtoMessage CreateUnsubscribeFromSpotsRequest(long accountId,int symbolId);
     ProtoMessage CreateTraderRequest(long accountID);
@@ -34,24 +32,21 @@ public:
     ProtoMessage CreateReconcileRequest(long accountId);
 
     ProtoMessage CreateLimitOrderRequest(long accountId,
-                                         string accessToken,
+                                         std::string accessToken,
                                          int symbolId,
                                          ProtoOATradeSide tradeSide,
                                          long volume,
                                          double limitPrice,
                                          double stopLoss,
                                          double takeProfit,
-                                         long expirationTimestamp);
+                                         long expirationTimestamp,
+                                         std::string clientMsgId);
 
-    ProtoMessage CreateStopOrderRequest(long accountId, string accessToken,
+    ProtoMessage CreateStopOrderRequest(long accountId, std::string accessToken,
         int symbolId, ProtoOATradeSide tradeSide, long volume,
         double stopPrice);
 
-    ProtoMessage CreateLimitOrderRequest(long accountId,
-        string accessToken, int symbolId, ProtoOATradeSide tradeSide,
-        long volume, double limitPrice);
-
-    ProtoMessage CreateStopLimitOrderRequest(long accountId, string accessToken,
+    ProtoMessage CreateStopLimitOrderRequest(long accountId, std::string accessToken,
         int symbolId, ProtoOATradeSide tradeSide, long volume, double stopPrice,
         int slippageInPoints);
 
@@ -78,11 +73,11 @@ public:
     ProtoMessage CreateTickDataRequest(long accountId, int symbolId, long from,
         long to, ProtoOAQuoteType type);
 
-    ProtoOAExecutionEvent GetExecutionEvent(string msg);
+    ProtoOAExecutionEvent GetExecutionEvent(std::string msg);
 
     ProtoMessage CreateProtoOASymbolsListReq(long ctid);
 
-    ProtoOASymbolsListRes GetSymbolListRes(string msg);
+    ProtoOASymbolsListRes GetSymbolListRes(std::string msg);
 };
 
 #endif // CTRADEROPENAPI_OPENAPIMESSAGEFACTORY_H
