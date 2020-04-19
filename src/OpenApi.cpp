@@ -303,3 +303,7 @@ void OpenApi::SendAmendPositionSLTPReq(long positionId, double stopLossPrice, do
     ProtoMessage msg = messageFactory.CreateAmendPositionSLTPRequest(_accountID, positionId, stopLossPrice, takeProfitPrice);
 }
 
+void OpenApi::GetTrader() {
+    ProtoMessage msg = messageFactory.CreateTraderRequest(_accountID);
+}
+

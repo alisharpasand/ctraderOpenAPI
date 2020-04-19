@@ -29,6 +29,7 @@ public:
                         std::string clientMsgId);
     void SendAmendPositionSLTPReq(long positionId, double stopLossPrice, double takeProfitPrice);
     void GetOrders();
+    void GetTrader();
     void GetTickData(int days, int symbol);
     void SendStopOrder(int symbol, ProtoOATradeSide side, int volume, double stopPrice);
     void ClosePosition(long positionId, long volume);
