@@ -3,6 +3,9 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <OpenApiMessagesFactory.h>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <zconf.h>
 #include "NetworkWrapper.h"
 
 #define CHK_NULL(x) if ((x)==NULL) exit (1)
@@ -60,13 +63,45 @@ int NetworkWrapper::writeSSLSocket(SSL *sslx, char *msg, uint16_t size)
     return err;
 }
 
-int NetworkWrapper::readSSLSocket(SSL *sslx)
+google::protobuf::uint32 readHdr(char *buf)
 {
-    memset(_buf, 0, sizeof(_buf));
-    int err = SSL_read (sslx, _buf, sizeof(_buf) - 1);
-    CHK_SSL(err);
-    //buf[err] = '\0';
-    return err;
+    int size;
+    memcpy(&size, buf, 4);
+    size = ntohl(size);
+    return size;
+}
+
+unsigned NetworkWrapper::readSSLSocket(SSL *sslx, char *& buf)
+{
+    char *headbuf = (char *)malloc(4);
+    int ret = SSL_read (sslx, headbuf, 4);
+    if (ret != 4)
+    {
+        delete headbuf;
+        return 0;
+    }
+
+    unsigned size = readHdr(headbuf);
+    delete headbuf;
+
+    buf = (char *)malloc(size);
+    unsigned remainingSize = size;
+    char *cursor = buf;
+    while (remainingSize > 0)
+    {
+        int ret = SSL_read(sslx, cursor, remainingSize);
+
+        if (ret < 0)
+            return 0;
+
+        if (ret == 0)
+            continue;
+
+        remainingSize -= ret;
+        cursor += ret;
+    }
+
+    return size;
 }
 
 void NetworkWrapper::join()
@@ -137,35 +172,26 @@ void NetworkWrapper::transmit(const ProtoMessage& message)
 
 void *NetworkWrapper::read_task(void *arg)
 {
-    int ret = 0;
-    int length, num;
+    int size;
+    char *buf;
     OpenApiMessagesFactory msgFactory;
     ProtoMessage protoMessage;
 
     while (NetworkWrapper::getInstance()._listening)
     {
-        length = 0;
-        ret = NetworkWrapper::getInstance().readSSLSocket(NetworkWrapper::getInstance()._ssl);
-        auto& buf = NetworkWrapper::getInstance()._buf;
-        if (ret > 0)
-        {
-            memcpy(&num, buf, 4);
-            // big endian to little endian
-            length = ntohl(num);
-            //printf("length: %d\n", length);
-        }
-        if (length > 0)
-        {
-            string _message(buf+4);
-            std::cout << _message << std::endl;
-            protoMessage = msgFactory.GetMessage(_message);
-            auto& handler = NetworkWrapper::getInstance().messageHandler;
-            if(handler)
-                handler->handleMessage(protoMessage);
-        }
-        //usleep(100000);
+        size = readSSLSocket(NetworkWrapper::getInstance()._ssl, buf);
+        if (size <= 0)
+            continue;
+
+        protoMessage = msgFactory.GetMessage(buf, size);
+        auto& handler = NetworkWrapper::getInstance().messageHandler;
+        if(handler)
+            handler->handleMessage(protoMessage);
+
+        usleep(10000);
     }
-    pthread_exit(&ret);
+
+    pthread_exit(nullptr);
 }
 
 void NetworkWrapper::startConnection(std::string server, int port) {

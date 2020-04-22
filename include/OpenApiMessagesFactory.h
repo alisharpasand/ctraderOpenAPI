@@ -15,7 +15,7 @@ class OpenApiMessagesFactory
 public:
 
     std::string getLastMessage(void);
-    ProtoMessage GetMessage(std::string msg);
+    ProtoMessage GetMessage(char *msg, unsigned size);
     ProtoMessage CreateMessage(uint payloadType, std::string &payload,
                 std::string &clientMsgId);
     ProtoMessage CreateMessage(uint payloadType, std::string &payload);

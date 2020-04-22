@@ -5,18 +5,29 @@
 #include "OpenApiCommonMessages.pb.h"
 #include "OpenApiCommonModelMessages.pb.h"
 #include "OpenApiMessagesFactory.h"
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <sys/socket.h>
 
 using namespace std;
+using namespace google::protobuf::io;
 
 string OpenApiMessagesFactory::getLastMessage(void)
 {
     return lastMessagePayload;
 }
 
-ProtoMessage OpenApiMessagesFactory::GetMessage(string msg)
+ProtoMessage readBody(char *message, google::protobuf::uint32 size)
 {
-    ProtoMessage _msg;
-    _msg.ParseFromString(msg);
+    ProtoMessage payload;
+    payload.ParseFromArray(message, size);
+    return payload;
+}
+
+ProtoMessage OpenApiMessagesFactory::GetMessage(char *msg, unsigned size)
+{
+    ProtoMessage _msg = readBody(msg, size);
+//    _msg.ParseFromString(msg);
     lastMessagePayloadType = _msg.payloadtype();
     lastMessagePayload = _msg.payload();
     return _msg;

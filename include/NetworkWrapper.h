@@ -17,7 +17,7 @@ public:
     void startConnection(std::string server, int port);
     void printfCertInfo(SSL *sslx);
     int writeSSLSocket(SSL *sslx, char *msg, uint16_t size);
-    int readSSLSocket(SSL *sslx);
+    static unsigned readSSLSocket(SSL *sslx, char *& buf);
     void join();
     int openSSLSocket();
     void transmit(const ProtoMessage& message);
@@ -28,7 +28,6 @@ private:
     int _sd;
     SSL_CTX* _ctx;
     SSL* _ssl;
-    char _buf[4096];
     std::string _apiHost = "demo.ctraderapi.com";
     int _apiPort = 5035;
     bool _listening = false;
