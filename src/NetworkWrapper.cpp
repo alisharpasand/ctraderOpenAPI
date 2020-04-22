@@ -71,10 +71,13 @@ google::protobuf::uint32 readHdr(char *buf)
     return size;
 }
 
-unsigned NetworkWrapper::readSSLSocket(SSL *sslx, char *& buf)
+unsigned NetworkWrapper::readSSLSocket(SSL *sslx, pthread_mutex_t& lock, char *& buf)
 {
     char *headbuf = (char *)malloc(4);
+//    pthread_mutex_lock(&lock);
     int ret = SSL_read (sslx, headbuf, 4);
+//    pthread_mutex_unlock(&lock);
+//    usleep(1000);
     if (ret != 4)
     {
         delete headbuf;
@@ -89,7 +92,9 @@ unsigned NetworkWrapper::readSSLSocket(SSL *sslx, char *& buf)
     char *cursor = buf;
     while (remainingSize > 0)
     {
+//        pthread_mutex_lock(&lock);
         int ret = SSL_read(sslx, cursor, remainingSize);
+//        pthread_mutex_unlock(&lock);
 
         if (ret < 0)
             return 0;
@@ -99,6 +104,7 @@ unsigned NetworkWrapper::readSSLSocket(SSL *sslx, char *& buf)
 
         remainingSize -= ret;
         cursor += ret;
+//        usleep(1000);
     }
 
     return size;
@@ -139,6 +145,8 @@ int NetworkWrapper::openSSLSocket()
 
     /* ----------------------------------------------- */
     /* Now we have TCP conncetion. Start SSL negotiation. */
+    pthread_mutex_init(&_sslLock, NULL);
+    pthread_mutex_lock(&_sslLock);
     _ssl = SSL_new (_ctx);
     CHK_NULL(_ssl);
     SSL_set_fd (_ssl, _sd);
@@ -148,6 +156,7 @@ int NetworkWrapper::openSSLSocket()
     /* Get the cipher - opt */
     printf ("SSL connection using %s\n", SSL_get_cipher (_ssl));
 
+    pthread_mutex_unlock(&_sslLock);
     /* Get server's certificate (note: beware of dynamic allocation) - opt */
     //printfCertInfo(ssl);
 
@@ -166,8 +175,11 @@ void NetworkWrapper::transmit(const ProtoMessage& message)
     size = htonl(size);
     memcpy(sizeArray, &size, 4);
     //
+
+    pthread_mutex_lock(&_sslLock);
     writeSSLSocket(_ssl, (char*)sizeArray, 4);
     writeSSLSocket(_ssl, (char*)pkt, message.ByteSize());
+    pthread_mutex_unlock(&_sslLock);
 }
 
 void *NetworkWrapper::read_task(void *arg)
@@ -179,7 +191,7 @@ void *NetworkWrapper::read_task(void *arg)
 
     while (NetworkWrapper::getInstance()._listening)
     {
-        size = readSSLSocket(NetworkWrapper::getInstance()._ssl, buf);
+        size = readSSLSocket(NetworkWrapper::getInstance()._ssl, NetworkWrapper::getInstance()._sslLock, buf);
         if (size <= 0)
             continue;
 
