@@ -183,6 +183,7 @@ void NetworkWrapper::readTask()
 
     while (listening_)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         char *buf;
         unsigned size = readSSLSocket(ssl_, buf);
         if (size == 0)
