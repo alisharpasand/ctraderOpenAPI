@@ -55,11 +55,10 @@ private:
     std::string _clientSecret;
     std::string _token;
     long _accountID;
-    NetworkWrapper& _net;
+    NetworkWrapper _net;
 
     void handleMessage(ProtoMessage message);
     OpenApiMessagesFactory messageFactory;
 };
-
 
 #endif //CTRADEROPENAPI_OPENAPI_H

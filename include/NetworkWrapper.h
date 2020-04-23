@@ -6,36 +6,44 @@
 #include <cstdint>
 #include <OpenApiCommonMessages.pb.h>
 #include <iostream>
+#include <Buffer.h>
+#include <NetworkMessage.h>
+#include <thread>
 #include "MessageHandler.h"
 
 class NetworkWrapper {
 public:
-    static NetworkWrapper& getInstance();
+    NetworkWrapper();
     NetworkWrapper(NetworkWrapper const&) = delete;
-    void operator=(NetworkWrapper const&) = delete;
+    NetworkWrapper operator=(NetworkWrapper const&) = delete;
 
     void startConnection(std::string server, int port);
-    void printfCertInfo(SSL *sslx);
-    int writeSSLSocket(SSL *sslx, char *msg, uint16_t size);
-    static unsigned readSSLSocket(SSL *sslx, pthread_mutex_t& lock, char *& buf);
-    void join();
-    int openSSLSocket();
     void transmit(const ProtoMessage& message);
+    void join();
+
     MessageHandler *messageHandler = nullptr;
 
-
 private:
-    int _sd;
-    SSL_CTX* _ctx;
-    pthread_mutex_t _sslLock;
-    SSL* _ssl;
-    std::string _apiHost = "demo.ctraderapi.com";
-    int _apiPort = 5035;
-    bool _listening = false;
-    pthread_t _readThread;
+    int sd_;
+    SSL_CTX* ctx_;
+    SSL* ssl_;
+    std::string apiHost_ = "demo.ctraderapi.com";
+    int apiPort_ = 5035;
+    bool listening_ = false;
 
-    static void *read_task(void *arg);
-    NetworkWrapper();
+    Buffer<NetworkMessage, 50> readBuffer_;
+    Buffer<NetworkMessage, 50> writeBuffer_;
+    std::thread readThread_;
+    std::thread writeThread_;
+    std::thread callbackThread_;
+
+    void readTask();
+    void writeTask();
+
+    void callbackTask();
+    int writeSSLSocket(SSL *sslx, char *msg, uint16_t size);
+    static unsigned readSSLSocket(SSL *sslx, char *& buf);
+    int openSSLSocket();
 };
 
 #endif //CTRADEROPENAPI_NETWORKWRAPPER_H

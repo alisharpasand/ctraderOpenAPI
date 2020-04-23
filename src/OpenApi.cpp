@@ -3,8 +3,7 @@
 #include <iostream>
 using namespace std;
 
-OpenApi::OpenApi() :
-    _net(NetworkWrapper::getInstance())
+OpenApi::OpenApi()
 {
     _net.messageHandler = this;
 }
@@ -146,7 +145,6 @@ void OpenApi::GetSymbols() {
 void OpenApi::handleMessage(ProtoMessage message)
 {
     int msgType = message.payloadtype();
-
     switch (msgType)
     {
         case HEARTBEAT_EVENT:
